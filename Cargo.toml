@@ -1,0 +1,17 @@
+[package]
+name = "ctp"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+crossbeam = "0.8"
+serde = { version = "1.0", features = ["derive"] }
+log = "0.4"
+env_logger = "0.9"
+
+[build-dependencies]
+bindgen = "0.59"
+regex = "1"
+cc = { version = "1.0", features = ["parallel"] }
