@@ -1,4 +1,5 @@
 use regex::Regex;
+
 use std::env;
 use std::path::{Path, PathBuf};
 
@@ -60,7 +61,7 @@ fn main() {
         // make output smaller
         .layout_tests(false)
         .generate_comments(false)
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         // we will handle class mannually by `autobind.py`
         // function defined in rust
         .opaque_type("CThostFtdcTraderApi")
@@ -84,7 +85,7 @@ fn main() {
             "Rust_CThostFtdcTraderSpi_Trait",
         ],
     )
-        .expect("Fail to replace trait!");
+    .expect("Fail to replace trait!");
     std::fs::write(&outfile, &buf).expect("Fail to write converted bindings!");
 
     if os == "win" {
@@ -93,11 +94,24 @@ fn main() {
 }
 
 fn fixed_link_name(f_name: &Path) {
-    let buf = std::fs::read_to_string(f_name).unwrap()
-        .replace("??_DRust_CThostFtdcMdApi@@QEAAXXZ", "??1Rust_CThostFtdcMdApi@@QEAA@XZ")
-        .replace("??_DRust_CThostFtdcMdSpi@@QEAAXXZ", "??1Rust_CThostFtdcMdSpi@@QEAA@XZ")
-        .replace("??_DRust_CThostFtdcTraderApi@@QEAAXXZ", "??1Rust_CThostFtdcTraderApi@@QEAA@XZ")
-        .replace("??_DRust_CThostFtdcTraderSpi@@QEAAXXZ", "??1Rust_CThostFtdcTraderSpi@@QEAA@XZ");
+    let buf = std::fs::read_to_string(f_name)
+        .unwrap()
+        .replace(
+            "??_DRust_CThostFtdcMdApi@@QEAAXXZ",
+            "??1Rust_CThostFtdcMdApi@@QEAA@XZ",
+        )
+        .replace(
+            "??_DRust_CThostFtdcMdSpi@@QEAAXXZ",
+            "??1Rust_CThostFtdcMdSpi@@QEAA@XZ",
+        )
+        .replace(
+            "??_DRust_CThostFtdcTraderApi@@QEAAXXZ",
+            "??1Rust_CThostFtdcTraderApi@@QEAA@XZ",
+        )
+        .replace(
+            "??_DRust_CThostFtdcTraderSpi@@QEAAXXZ",
+            "??1Rust_CThostFtdcTraderSpi@@QEAA@XZ",
+        );
 
     std::fs::write(f_name, &buf).expect("Fail to write converted bindings!");
 }
@@ -121,7 +135,7 @@ fn replace_trait(f_name: &Path, traits: &[&str]) -> Result<String, Box<dyn std::
             r#"extern \s*"C"\s*\{{\s*pub\s+fn\s+{}_(\w+)\s*\(([^)]*)\)([^;]*);\s*}}\s*"#,
             trait_extern
         ))
-            .unwrap();
+        .unwrap();
         let pattern_arg = Regex::new(r"\s*(\w+)\s*:\s*(.*)\s*").unwrap();
 
         let mut exports = vec![];

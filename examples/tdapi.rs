@@ -1,11 +1,11 @@
 use ctp::*;
 
-use std::os::raw::*;
 use std::ffi::{CStr, CString};
+use std::os::raw::*;
 
+use crossbeam::channel::{self, Receiver, Sender};
 use log::*;
-use crossbeam::{channel::{self, Sender, Receiver}};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Copy, Clone, Eq, PartialEq)]
 pub enum Resume {
@@ -16,7 +16,7 @@ pub enum Resume {
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Config {
-    flowpath: String,
+    flow_path: String,
     front_addr: String,
     nm_addr: String,
     user_info: String,
@@ -60,17 +60,24 @@ impl TDApi {
     }
 
     pub fn new(config: &Config) -> Self {
-        let cs = std::ffi::CString::new(config.flowpath.as_bytes()).unwrap();
+        let cs = std::ffi::CString::new(config.flow_path.as_bytes()).unwrap();
         let api = unsafe {
             Rust_CThostFtdcTraderApi::new(CThostFtdcTraderApi_CreateFtdcTraderApi(cs.as_ptr()))
         };
-        Self { api, spi: None, config: config.clone(), rx: None }
+        Self {
+            api,
+            spi: None,
+            config: config.clone(),
+            rx: None,
+        }
     }
 
     /// destory `self.spi`, which created by `TDApi`
     fn drop_spi(spi: *mut Rust_CThostFtdcTraderSpi) {
         let mut spi = unsafe { Box::from_raw(spi) };
-        unsafe { spi.destruct(); }
+        unsafe {
+            spi.destruct();
+        }
     }
 
     fn register<S: Rust_CThostFtdcTraderSpi_Trait>(&mut self, spi: S) {
@@ -115,7 +122,9 @@ impl TDApi {
         // address invalid.
         let spi_stub = unsafe { Rust_CThostFtdcTraderSpi::new(ptr) };
         let spi: *mut Rust_CThostFtdcTraderSpi = Box::into_raw(Box::new(spi_stub));
-        unsafe { self.api.RegisterSpi(spi as _); }
+        unsafe {
+            self.api.RegisterSpi(spi as _);
+        }
 
         self.spi = Some(spi);
     }
@@ -129,15 +138,21 @@ impl TDApi {
         if self.config.front_addr.len() > 0 {
             debug!("cs is: {}", self.config.front_addr);
             let cs = CString::new(self.config.front_addr.as_bytes()).unwrap();
-            unsafe { self.api.RegisterFront(cs.as_ptr() as *mut _); }
+            unsafe {
+                self.api.RegisterFront(cs.as_ptr() as *mut _);
+            }
         }
 
         unsafe {
-            self.api.SubscribePrivateTopic(self.config.private_resume as _);
-            self.api.SubscribePublicTopic(self.config.public_resume as _);
+            self.api
+                .SubscribePrivateTopic(self.config.private_resume as _);
+            self.api
+                .SubscribePublicTopic(self.config.public_resume as _);
         }
 
-        unsafe { self.api.Init(); }
+        unsafe {
+            self.api.Init();
+        }
 
         Ok(())
     }
@@ -152,7 +167,9 @@ impl Default for Resume {
 impl Drop for TDApi {
     fn drop(&mut self) {
         debug!("drop api");
-        unsafe { self.api.destruct(); }
+        unsafe {
+            self.api.destruct();
+        }
         if let Some(spi) = self.spi {
             debug!("drop spi");
             Self::drop_spi(spi);
@@ -166,7 +183,7 @@ pub fn main() {
     eprintln!("api version: {}", TDApi::get_version());
 
     let mut tdapi = TDApi::new(&Config {
-        flowpath: "".into(),
+        flow_path: "".into(),
         nm_addr: "".into(),
         user_info: "".into(),
         product_info: "".into(),

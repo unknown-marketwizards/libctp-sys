@@ -17,7 +17,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Config {
-    flowpath: String,
+    flow_path: String,
     is_udp: bool,
     is_multicast: bool,
     front_addr: Vec<String>,
@@ -53,6 +53,14 @@ impl Rust_CThostFtdcMdSpi_Trait for Spi {
         self.tx.send(Event::Connected).unwrap();
     }
 
+    fn on_front_disconnected(&mut self, _nReason: ::std::os::raw::c_int) {
+        debug!("front_disconnected");
+    }
+
+    fn on_heart_beat_warning(&mut self, _nTimeLapse: ::std::os::raw::c_int) {
+        debug!("heart_beating");
+    }
+
     fn on_rsp_user_login(
         &mut self,
         _pRspUserLogin: *mut CThostFtdcRspUserLoginField,
@@ -62,14 +70,6 @@ impl Rust_CThostFtdcMdSpi_Trait for Spi {
     ) {
         debug!("user login");
         self.tx.send(Event::UserLogin).unwrap();
-    }
-
-    fn on_front_disconnected(&mut self, _nReason: ::std::os::raw::c_int) {
-        debug!("front_disconnected");
-    }
-
-    fn on_heart_beat_warning(&mut self, _nTimeLapse: ::std::os::raw::c_int) {
-        debug!("heart_beating");
     }
 
     fn on_rsp_error(
@@ -98,7 +98,7 @@ impl MDApi {
     }
 
     pub fn new(config: &Config) -> Self {
-        let cs = std::ffi::CString::new(config.flowpath.as_bytes()).unwrap();
+        let cs = std::ffi::CString::new(config.flow_path.as_bytes()).unwrap();
         let api = unsafe {
             Rust_CThostFtdcMdApi::new(CThostFtdcMdApi::CreateFtdcMdApi(
                 cs.as_ptr(),
@@ -278,7 +278,7 @@ pub fn main() {
     info!("load mdapi: {}", MDApi::get_version());
 
     let mut mdapi = MDApi::new(&Config {
-        flowpath: "".into(),
+        flow_path: "".into(),
 
         // simnow - full
         front_addr: vec![

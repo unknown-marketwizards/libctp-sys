@@ -1,7 +1,9 @@
 .idea/
 .vscode/
 /target/
+
 Cargo.lock
+
 /TradingDay.con
 /QueryRsp.con
 /DialogRsp.con
