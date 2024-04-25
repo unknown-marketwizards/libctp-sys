@@ -1,0 +1,127 @@
+版本号：v6.7.2_20230913 10:48:10.4926 (待补充)
+后台版本：V6.7.2
+注意：此版本为支持郑商所附加保证金算法调整、中金所新组保RCAMS和大商所新组保Rule业务而变更，新增12个交易查询接口，请各终端厂商根据自身情况进行开发。
+
+变更说明：
+
+1、新增接口：SPBM附加跨品种抵扣参数查询。
+
+（1）查询请求
+	///SPBM附加跨品种抵扣参数查询
+	virtual int ReqQrySPBMAddOnInterParameter(CThostFtdcQrySPBMAddOnInterParameterField *pQrySPBMAddOnInterParameter, int nRequestID) = 0;
+
+（2）查询响应
+    ///SPBM附加跨品种抵扣参数查询响应
+	virtual void OnRspQrySPBMAddOnInterParameter(CThostFtdcSPBMAddOnInterParameterField *pSPBMAddOnInterParameter, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};   
+ 
+
+2、新增接口：RCAMS产品组合信息查询。
+
+（1）查询请求
+	///RCAMS产品组合信息查询
+	virtual int ReqQryRCAMSCombProductInfo(CThostFtdcQryRCAMSCombProductInfoField *pQryRCAMSCombProductInfo, int nRequestID) = 0;
+
+（2）查询响应
+	///RCAMS产品组合信息查询响应
+	virtual void OnRspQryRCAMSCombProductInfo(CThostFtdcRCAMSCombProductInfoField *pRCAMSCombProductInfo, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};
+
+
+3、新增接口：RCAMS同合约风险对冲参数查询。
+
+（1）查询请求
+	///RCAMS同合约风险对冲参数查询
+	virtual int ReqQryRCAMSInstrParameter(CThostFtdcQryRCAMSInstrParameterField *pQryRCAMSInstrParameter, int nRequestID) = 0;
+
+（2）查询响应
+	///RCAMS同合约风险对冲参数查询响应
+	virtual void OnRspQryRCAMSInstrParameter(CThostFtdcRCAMSInstrParameterField *pRCAMSInstrParameter, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};	
+
+4、新增接口：RCAMS品种内风险对冲参数查询。
+
+（1）查询请求
+	///RCAMS品种内风险对冲参数查询
+	virtual int ReqQryRCAMSIntraParameter(CThostFtdcQryRCAMSIntraParameterField *pQryRCAMSIntraParameter, int nRequestID) = 0;
+
+（2）查询响应
+	///RCAMS品种内风险对冲参数查询响应
+	virtual void OnRspQryRCAMSIntraParameter(CThostFtdcRCAMSIntraParameterField *pRCAMSIntraParameter, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};
+
+5、新增接口：RCAMS跨品种风险折抵参数查询。
+
+（1）查询请求
+	///RCAMS跨品种风险折抵参数查询
+	virtual int ReqQryRCAMSInterParameter(CThostFtdcQryRCAMSInterParameterField *pQryRCAMSInterParameter, int nRequestID) = 0;
+
+（2）查询响应
+	///RCAMS跨品种风险折抵参数查询响应
+	virtual void OnRspQryRCAMSInterParameter(CThostFtdcRCAMSInterParameterField *pRCAMSInterParameter, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};
+
+6、新增接口：RCAMS空头期权风险调整参数查询。
+
+（1）查询请求
+	///RCAMS空头期权风险调整参数查询
+	virtual int ReqQryRCAMSShortOptAdjustParam(CThostFtdcQryRCAMSShortOptAdjustParamField *pQryRCAMSShortOptAdjustParam, int nRequestID) = 0;
+
+（2）查询响应
+	///RCAMS空头期权风险调整参数查询响应
+	virtual void OnRspQryRCAMSShortOptAdjustParam(CThostFtdcRCAMSShortOptAdjustParamField *pRCAMSShortOptAdjustParam, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};
+
+7、新增接口：RCAMS策略组合持仓查询。
+
+（1）查询请求
+	///RCAMS策略组合持仓查询
+	virtual int ReqQryRCAMSInvestorCombPosition(CThostFtdcQryRCAMSInvestorCombPositionField *pQryRCAMSInvestorCombPosition, int nRequestID) = 0;
+
+（2）查询响应
+	///RCAMS策略组合持仓查询响应
+	virtual void OnRspQryRCAMSInvestorCombPosition(CThostFtdcRCAMSInvestorCombPositionField *pRCAMSInvestorCombPosition, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};
+
+8、新增接口：投资者品种RCAMS保证金查询。
+
+（1）查询请求
+	///投资者品种RCAMS保证金查询
+	virtual int ReqQryInvestorProdRCAMSMargin(CThostFtdcQryInvestorProdRCAMSMarginField *pQryInvestorProdRCAMSMargin, int nRequestID) = 0;
+
+（2）查询响应
+	///投资者品种RCAMS保证金查询响应
+	virtual void OnRspQryInvestorProdRCAMSMargin(CThostFtdcInvestorProdRCAMSMarginField *pInvestorProdRCAMSMargin, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};
+
+9、新增接口：RULE合约保证金参数查询。
+
+（1）查询请求
+	///RULE合约保证金参数查询
+	virtual int ReqQryRULEInstrParameter(CThostFtdcQryRULEInstrParameterField *pQryRULEInstrParameter, int nRequestID) = 0;
+
+（2）查询响应
+	///RULE合约保证金参数查询响应
+	virtual void OnRspQryRULEInstrParameter(CThostFtdcRULEInstrParameterField *pRULEInstrParameter, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};
+
+10、新增接口：RULE品种内对锁仓折扣参数查询。
+
+（1）查询请求
+	///RULE品种内对锁仓折扣参数查询
+	virtual int ReqQryRULEIntraParameter(CThostFtdcQryRULEIntraParameterField *pQryRULEIntraParameter, int nRequestID) = 0;
+
+（2）查询响应
+	///RULE品种内对锁仓折扣参数查询响应
+	virtual void OnRspQryRULEIntraParameter(CThostFtdcRULEIntraParameterField *pRULEIntraParameter, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};
+
+11、新增接口：RULE跨品种抵扣参数查询。
+
+（1）查询请求
+	///RULE跨品种抵扣参数查询
+	virtual int ReqQryRULEInterParameter(CThostFtdcQryRULEInterParameterField *pQryRULEInterParameter, int nRequestID) = 0;
+
+（2）查询响应
+	///RULE跨品种抵扣参数查询响应
+	virtual void OnRspQryRULEInterParameter(CThostFtdcRULEInterParameterField *pRULEInterParameter, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};
+
+12、新增接口：投资者产品RULE保证金查询。
+
+（1）查询请求
+	///投资者产品RULE保证金查询
+	virtual int ReqQryInvestorProdRULEMargin(CThostFtdcQryInvestorProdRULEMarginField *pQryInvestorProdRULEMargin, int nRequestID) = 0;
+
+（2）查询响应
+	///投资者产品RULE保证金查询响应
+	virtual void OnRspQryInvestorProdRULEMargin(CThostFtdcInvestorProdRULEMarginField *pInvestorProdRULEMargin, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {};	
