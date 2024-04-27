@@ -2,7 +2,7 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-use ctp::*;
+use ctp_sys::*;
 
 use std::ffi::{CStr, CString};
 use std::os::raw::*;
@@ -291,7 +291,7 @@ pub fn main() {
     });
 
     mdapi.start().unwrap();
-    mdapi.subscribe_market_data(&["rb2201"], false).unwrap();
+    mdapi.subscribe_market_data(&["rb2501"], false).unwrap();
     let mut count = 0;
 
     eprintln!("mk api success");

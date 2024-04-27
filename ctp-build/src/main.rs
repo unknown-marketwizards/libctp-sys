@@ -1,18 +1,20 @@
-use regex::Regex;
-
 use std::env;
 use std::path::{Path, PathBuf};
+
+use regex::Regex;
 
 mod auto_bind;
 
 fn main() {
     let api_root = PathBuf::from("traderapi");
-    let api_root = std::env::current_dir().unwrap().join(api_root);
+    let api_root = env::current_dir().unwrap().join(api_root);
 
     let api_include_path = api_root.join("include");
 
-    let hxx_file = PathBuf::from(env::var("OUT_DIR").unwrap()).join("wrapper.hpp");
-    let cxx_file = PathBuf::from(env::var("OUT_DIR").unwrap()).join("wrapper.cpp");
+    let cxx_root = PathBuf::from("ctp-sys").join("cxx");
+
+    let hxx_file = cxx_root.join("wrapper.hpp");
+    let cxx_file = cxx_root.join("wrapper.cpp");
     auto_bind::auto_bind(&api_include_path, &hxx_file, &cxx_file);
 
     let os = if cfg!(target_os = "windows") {
@@ -22,32 +24,6 @@ fn main() {
     } else {
         panic!("can not build on this platform.")
     };
-    let arch = if cfg!(target_arch = "x86_64") {
-        "64"
-    } else if cfg!(target_arch = "x86") {
-        "32"
-    } else {
-        panic!("can not build on this platform.")
-    };
-
-    cc::Build::new()
-        .cpp(true)
-        .include(api_include_path.to_str().unwrap())
-        .file(cxx_file.to_str().unwrap())
-        .flag_if_supported("-std=c++17")
-        .flag_if_supported("-w")
-        .compile("wrapper");
-
-    println!(
-        "cargo:rustc-link-search={}",
-        api_root
-            .join("lib")
-            .join(format!("{}{}", os, arch))
-            .display()
-    );
-
-    println!("cargo:rustc-link-lib=dylib=thostmduserapi_se");
-    println!("cargo:rustc-link-lib=dylib=thosttraderapi_se");
 
     // ctp api header is clean enough, we will use blacklist instead whitelist
     let bindings = bindgen::Builder::default()
@@ -73,7 +49,7 @@ fn main() {
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
 
-    let outfile = PathBuf::from(env::var("OUT_DIR").unwrap()).join("bindings.rs");
+    let outfile = PathBuf::from("ctp-sys").join("src").join("bindings.rs");
     bindings
         .write_to_file(&outfile)
         .expect("Couldn't write bindings!");
