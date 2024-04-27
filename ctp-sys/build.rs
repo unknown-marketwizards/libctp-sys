@@ -2,8 +2,7 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
-    let api_root = env::current_dir()
-        .unwrap()
+    let api_root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap())
         .parent()
         .unwrap()
         .join("traderapi");
@@ -11,7 +10,6 @@ fn main() {
     let api_include_path = api_root.join("include");
 
     let cxx_file = PathBuf::from("cxx").join("wrapper.cpp");
-    let cxx_file = env::current_dir().unwrap().join(cxx_file);
 
     let os = if cfg!(target_os = "windows") {
         "win"
