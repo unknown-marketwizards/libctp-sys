@@ -1,5 +1,8 @@
 .idea/
 .vscode/
+.vs/
+Debug/
+Release/
 /target/
 
 Cargo.lock
