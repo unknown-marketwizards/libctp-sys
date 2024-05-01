@@ -7,11 +7,14 @@ mod auto_bind;
 
 fn main() {
     let api_root = PathBuf::from("traderapi");
-    let api_root = env::current_dir().unwrap().join(api_root);
+    let api_root = env::current_dir()
+        .unwrap()
+        .join("libctp-sys")
+        .join(api_root);
 
     let api_include_path = api_root.join("include");
 
-    let cxx_root = PathBuf::from("ctp-sys").join("cxx");
+    let cxx_root = PathBuf::from("libctp-sys").join("cxx");
 
     let hxx_file = cxx_root.join("wrapper.hpp");
     let cxx_file = cxx_root.join("wrapper.cpp");
@@ -49,7 +52,7 @@ fn main() {
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
 
-    let outfile = PathBuf::from("ctp-sys").join("src").join("bindings.rs");
+    let outfile = PathBuf::from("libctp-sys").join("src").join("bindings.rs");
     bindings
         .write_to_file(&outfile)
         .expect("Couldn't write bindings!");

@@ -2,7 +2,7 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-use ctp_sys::*;
+use libctp_sys::*;
 
 use std::ffi::{CStr, CString};
 use std::os::raw::*;

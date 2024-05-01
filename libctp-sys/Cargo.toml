@@ -1,8 +1,12 @@
 [package]
-name = "ctp-sys"
+name = "libctp-sys"
 version = "0.1.0"
 edition = "2021"
-publish = ["../traderapi/**/*"]
+repository = "https://github.com/unknown-marketwizards/ctp-rs"
+keywords = ["futures", "ctp"]
+readme = "../README.md"
+description = "Rust bindings to CTP API"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

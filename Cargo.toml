@@ -1,3 +1,3 @@
 [workspace]
 resolver = "2"
-members = ["ctp-build", "ctp-sys", "examples"]
+members = ["ctp-build", "libctp-sys", "examples"]

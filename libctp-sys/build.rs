@@ -2,10 +2,7 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
-    let api_root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap())
-        .parent()
-        .unwrap()
-        .join("traderapi");
+    let api_root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap()).join("traderapi");
 
     let api_include_path = api_root.join("include");
 

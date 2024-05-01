@@ -1,4 +1,5 @@
-# ctp-rs
+# libctp-sys
+
 Rust bindings to CTP API.
 
 # os support
@@ -18,5 +19,5 @@ Add this in your `Cargo.toml`:
 
 ```
 [dependencies]
-ctp-sys = { git = "https://github.com/unknown-marketwizards/ctp-rs.git" }
+libctp-sys = { git = "https://github.com/unknown-marketwizards/libctp-sys.git" }
 ```
