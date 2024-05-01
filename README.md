@@ -19,5 +19,5 @@ Add this in your `Cargo.toml`:
 
 ```
 [dependencies]
-libctp-sys = { git = "https://github.com/unknown-marketwizards/libctp-sys.git" }
+libctp-sys = "0.1"
 ```
