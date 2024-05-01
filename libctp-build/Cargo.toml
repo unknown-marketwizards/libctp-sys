@@ -1,5 +1,5 @@
 [package]
-name = "ctp-build"
+name = "libctp-build"
 version = "0.1.0"
 edition = "2021"
 
