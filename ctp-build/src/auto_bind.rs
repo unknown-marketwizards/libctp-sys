@@ -6,7 +6,6 @@ use regex::Regex;
 #[derive(Debug)]
 struct ClsAst {
     name: String,
-    parent: Vec<ClsAst>,
     pub funcs: Vec<ClsF>,
 }
 
@@ -14,7 +13,6 @@ impl ClsAst {
     pub fn new(cls_name: &str) -> Self {
         ClsAst {
             name: cls_name.to_string(),
-            parent: vec![],
             funcs: vec![],
         }
     }
@@ -123,7 +121,11 @@ struct ClsF {
     rtn: String,
     name: String,
     args: String,
+
+    #[allow(dead_code)]
     decl: String,
+
+    #[allow(dead_code)]
     comments: Vec<String>,
 }
 
