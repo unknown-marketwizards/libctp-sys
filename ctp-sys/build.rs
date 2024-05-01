@@ -9,7 +9,9 @@ fn main() {
 
     let api_include_path = api_root.join("include");
 
-    let cxx_file = PathBuf::from("cxx").join("wrapper.cpp");
+    let cxx_file = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap())
+        .join("cxx")
+        .join("wrapper.cpp");
 
     let os = if cfg!(target_os = "windows") {
         "win"
