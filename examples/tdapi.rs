@@ -1,4 +1,4 @@
-use ctp_sys::*;
+use libctp_sys::*;
 
 use std::ffi::{CStr, CString};
 use std::os::raw::*;
@@ -191,7 +191,7 @@ pub fn main() {
         private_resume: Resume::Quick,
 
         // simnow - full
-        front_addr: "tcp://180.168.146.187:10101".into(),
+        front_addr: "tcp://180.168.146.187:10130".into(),
         broker_id: "9999".into(),
         auth_code: "".into(),
         app_id: "".into(),

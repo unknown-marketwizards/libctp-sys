@@ -281,11 +281,7 @@ pub fn main() {
         flow_path: "".into(),
 
         // simnow - full
-        front_addr: vec![
-            "tcp://180.168.146.187:10211".into(),
-            "tcp://180.168.146.187:10212".into(),
-            "tcp://218.202.237.33:10213".into(),
-        ],
+        front_addr: vec!["tcp://180.168.146.187:10131".into()],
 
         ..Default::default()
     });
