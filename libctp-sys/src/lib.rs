@@ -17,5 +17,11 @@ pub use bindings::*;
 unsafe impl Send for Rust_CThostFtdcMdApi {}
 unsafe impl Sync for Rust_CThostFtdcMdApi {}
 
+unsafe impl Send for Rust_CThostFtdcMdSpi {}
+unsafe impl Sync for Rust_CThostFtdcMdSpi {}
+
 unsafe impl Send for Rust_CThostFtdcTraderApi {}
 unsafe impl Sync for Rust_CThostFtdcTraderApi {}
+
+unsafe impl Send for Rust_CThostFtdcTraderSpi {}
+unsafe impl Sync for Rust_CThostFtdcTraderSpi {}
