@@ -7,6 +7,10 @@ use crossbeam::channel::{self, Receiver, Sender};
 use log::*;
 use serde::{Deserialize, Serialize};
 
+struct SafePointer<T>(*mut T);
+
+unsafe impl<T> Send for SafePointer<T> {}
+
 #[derive(Debug, Serialize, Deserialize, Copy, Clone, Eq, PartialEq)]
 pub enum Resume {
     Restart = THOST_TE_RESUME_TYPE_THOST_TERT_RESTART as _,
@@ -36,7 +40,7 @@ pub struct Config {
 
 pub struct TDApi {
     api: Rust_CThostFtdcTraderApi,
-    spi: Option<*mut Rust_CThostFtdcTraderSpi>,
+    spi: Option<SafePointer<Rust_CThostFtdcTraderSpi>>,
     rx: Option<Receiver<String>>,
 
     pub(crate) config: Config,
@@ -73,8 +77,8 @@ impl TDApi {
     }
 
     /// destory `self.spi`, which created by `TDApi`
-    fn drop_spi(spi: *mut Rust_CThostFtdcTraderSpi) {
-        let mut spi = unsafe { Box::from_raw(spi) };
+    fn drop_spi(spi: SafePointer<Rust_CThostFtdcTraderSpi>) {
+        let mut spi = unsafe { Box::from_raw(spi.0) };
         unsafe {
             spi.destruct();
         }
@@ -126,7 +130,7 @@ impl TDApi {
             self.api.RegisterSpi(spi as _);
         }
 
-        self.spi = Some(spi);
+        self.spi = Some(SafePointer(spi));
     }
 
     pub fn req_init(&mut self) -> Result<(), String> {
@@ -170,7 +174,7 @@ impl Drop for TDApi {
         unsafe {
             self.api.destruct();
         }
-        if let Some(spi) = self.spi {
+        if let Some(spi) = self.spi.take() {
             debug!("drop spi");
             Self::drop_spi(spi);
         }

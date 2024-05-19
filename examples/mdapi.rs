@@ -15,6 +15,10 @@ use crossbeam::{
 use log::*;
 use serde::{Deserialize, Serialize};
 
+struct SafePointer<T>(*mut T);
+
+unsafe impl<T> Send for SafePointer<T> {}
+
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Config {
     flow_path: String,
@@ -28,7 +32,7 @@ pub struct Config {
 
 pub struct MDApi {
     api: Rust_CThostFtdcMdApi,
-    spi: Option<*mut Rust_CThostFtdcMdSpi>,
+    spi: Option<SafePointer<Rust_CThostFtdcMdSpi>>,
     rx: Option<Receiver<Event>>,
 
     pub(crate) config: Config,
@@ -248,11 +252,11 @@ impl MDApi {
             self.api.RegisterSpi(spi as _);
         }
 
-        self.spi = Some(spi);
+        self.spi = Some(SafePointer(spi));
     }
 
-    fn drop_spi(spi: *mut Rust_CThostFtdcMdSpi) {
-        let mut spi = unsafe { Box::from_raw(spi) };
+    fn drop_spi(spi: SafePointer<Rust_CThostFtdcMdSpi>) {
+        let mut spi = unsafe { Box::from_raw(spi.0) };
         unsafe {
             spi.destruct();
         }
@@ -265,7 +269,7 @@ impl Drop for MDApi {
         unsafe {
             self.api.destruct();
         }
-        if let Some(spi) = self.spi {
+        if let Some(spi) = self.spi.take() {
             debug!("drop spi");
             Self::drop_spi(spi);
         }
